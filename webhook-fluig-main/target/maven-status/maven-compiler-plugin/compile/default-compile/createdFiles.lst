@@ -4,6 +4,7 @@ br/com/sebrae/uti/webhookfluig/service/UtilService.class
 br/com/sebrae/uti/webhookfluig/repository/BBRepository.class
 br/com/sebrae/uti/webhookfluig/repository/CieloRepository.class
 br/com/sebrae/uti/webhookfluig/service/FluigService.class
+br/com/sebrae/uti/webhookfluig/controller/PingController.class
 br/com/sebrae/uti/webhookfluig/service/BBService.class
 br/com/sebrae/uti/webhookfluig/service/CieloService.class
 br/com/sebrae/uti/webhookfluig/WebhookFluigApplication.class

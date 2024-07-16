@@ -23,7 +23,7 @@ RUN mkdir /app
 COPY --from=builder /app/target/*.jar /app/webhook-fluig.jar
 
 # Definir a porta que a aplicação vai expor
-EXPOSE 8081
+EXPOSE 8085
 
 # Comando para rodar a aplicação
 CMD ["java", "-jar", "/app/webhook-fluig.jar"]
