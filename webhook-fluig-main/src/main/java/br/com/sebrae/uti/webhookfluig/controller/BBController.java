@@ -22,7 +22,7 @@ public class BBController {
     @Autowired
     UtilService utilService;
 
-    String endpointFluig = "http://localhost:8081/bb/notificacao/teste";
+    String endpointFluig = "https://testehook.onrender.com/bb/notificacao/teste";
 
     Logger logger = Logger.getLogger(BBController.class);
 
