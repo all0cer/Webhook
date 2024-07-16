@@ -14,8 +14,6 @@ Para criar e iniciar o container da aplicação:
 - **docker run** -d --name webhook-fluig -p 8080:8080 gitlab.sebrae.com.br:5050/rn/webhook-fluig
 ---
 
-## Endpoints
-`https://restapi.rn.sebrae.com.br/`
 ### POST
 `/cielo/notificacao` <br/>
 `/bb/notificacao` <br/>

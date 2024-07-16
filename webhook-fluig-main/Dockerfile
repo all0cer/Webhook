@@ -17,6 +17,8 @@ FROM openjdk:20-slim-buster
 # Criar diretório para o JAR
 RUN mkdir /app
 
+
+
 # Copiar o JAR da etapa de build para a nova imagem
 COPY --from=builder /app/target/*.jar /app/webhook-fluig.jar
 
