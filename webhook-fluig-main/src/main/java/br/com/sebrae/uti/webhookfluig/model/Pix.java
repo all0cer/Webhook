@@ -30,6 +30,7 @@ public class Pix {
                 ", \"chave:\"" + chave + '\"' +
                 ", \"horario\":\"" + horario + '\"' +
                 ", \"infoPagador\":\"" + infoPagador + '\"' +
+                ", \"nome\":\"" + nome + '\"' +
                 '}';
     }
 }
