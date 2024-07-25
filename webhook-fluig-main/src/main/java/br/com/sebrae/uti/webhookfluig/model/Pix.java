@@ -19,6 +19,7 @@ public class Pix {
     private String chave;
     private String horario;
     private String infoPagador;
+    private String nome;
 
     @Override
     public String toString() {
