@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -19,8 +21,26 @@ public class Pix {
     private String chave;
     private String horario;
     private String infoPagador;
-    private String nome;
 
+    @Embedded
+    private Pagador pagador;
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @Embeddable
+    public static class Pagador {
+        private String cpf;
+        private String nome;
+
+        @Override
+        public String toString() {
+            return "Pagador{" +
+                    "cpf='" + cpf + '\'' +
+                    ", nome='" + nome + '\'' +
+                    '}';
+        }
+    }
     @Override
     public String toString() {
         return "{" +
@@ -30,7 +50,7 @@ public class Pix {
                 ", \"chave:\"" + chave + '\"' +
                 ", \"horario\":\"" + horario + '\"' +
                 ", \"infoPagador\":\"" + infoPagador + '\"' +
-                ", \"nome\":\"" + nome + '\"' +
+                ", \"nome\":\"" + pagador.toString()+ '\"' +
                 '}';
     }
 }
