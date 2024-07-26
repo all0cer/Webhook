@@ -22,7 +22,7 @@ public class BBController {
     @Autowired
     UtilService utilService;
 
-    String endpointFluig = "https://testehook.onrender.com/bb/notificacao/teste";
+
 
     Logger logger = Logger.getLogger(BBController.class);
 
@@ -31,7 +31,7 @@ public class BBController {
         utilService.printRequestInfo(request, "BB");
         try{
             String body = bb.toString();
-            fluigService.notifyFluig(endpointFluig, body);
+            fluigService.notifyFluig(body);
             logger.info(body);
             bbService.salvar(bb.getPix().get(0));
             return new ResponseEntity<>(bb, HttpStatus.OK);
