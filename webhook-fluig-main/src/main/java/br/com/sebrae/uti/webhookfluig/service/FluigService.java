@@ -72,22 +72,19 @@ public class FluigService {
 
     private void getResponseDataSearch(String txid) {
         try {
-            JSONObject requestBodyJson = new JSONObject();
-            requestBodyJson.put("endpoint", "dataset");
-            requestBodyJson.put("method", "get");
-            requestBodyJson.put("params", "datasetId=dsPagamentoWebhook&constraintsField=txId&constraintsInitialValue=" + txid + "&constraintsField=processId&constraintsInitialValue=pix");
-            System.out.println("RequestBodyJson: " + requestBodyJson.toString());
-            RequestBody requestBody = RequestBody.create(mediaType, txid);
+            String jsonBody = "{\"endpoint\":\"dataset\",\"method\":\"get\",\"params\":\"datasetId=dsPagamentoWebhook&constraintsField=txId&constraintsInitialValue=" + txid + "&constraintsField=processId&constraintsInitialValue=pix\"}";
+            System.out.println("RequestBodyJson: " + jsonBody);
+            RequestBody requestBody = RequestBody.create(mediaType, jsonBody);
             Request request = new Request.Builder()
+                    .addHeader("Content-Type", "application/json")
                     .url(DATASEARCH_URI)
                     .post(requestBody)
                     .build();
-
+            System.out.println("Request: " + request);
             Response response = client.newCall(request).execute();
+            System.out.println("Response: " + response.body().string());
             if (response.isSuccessful()) {
                 String responseBody = response.body().string();
-
-               extractMessageFromResponse(responseBody);
 
             } else {
                 throw new IOException("Unexpected code " + response);

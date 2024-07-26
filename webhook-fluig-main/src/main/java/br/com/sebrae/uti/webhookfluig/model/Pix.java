@@ -22,7 +22,7 @@ public class Pix {
                 "\"endToEndId\":\"" +  '\"' +
                 ", \"txid\":\"" + txid + '\"' +
                 ", \"valor\":\"" +   '\"' +
-                ", \"chave:\"" +   '\"' +
+                ", \"chave\":\"" + '\"' +
                 ", \"horario\":\"" + '\"' +
                 ", \"infoPagador\":\"" +  '\"' +
                 '}';
