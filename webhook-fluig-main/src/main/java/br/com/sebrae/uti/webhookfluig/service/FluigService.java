@@ -15,6 +15,11 @@ public class FluigService {
     MediaType mediaType;
     private final String DATASEARCH_URI = "https://fluighml.rn.sebrae.com.br/fluighub/rest/service/execute/datasearch";
 
+    public FluigService() {
+        this.client = new OkHttpClient(); // Inicializa o OkHttpClient
+        this.mediaType = MediaType.parse("application/json; charset=utf-8");
+    }
+
     public boolean paymentStatusEqualTwo (Map<String, String> body) {
         int payment_status = Integer.parseInt(body.get("payment_status"));
         return payment_status == 2;
