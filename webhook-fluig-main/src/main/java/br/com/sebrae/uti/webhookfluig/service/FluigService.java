@@ -34,6 +34,7 @@ public class FluigService {
 
     private String extractTxidFromJson(String jsonString) {
         try {
+            System.out.println("Json: " + jsonString);
             JSONObject jsonObject = new JSONObject(jsonString);
 
             JSONArray pixArray = jsonObject.getJSONArray("pix");
@@ -75,6 +76,7 @@ public class FluigService {
             requestBodyJson.put("endpoint", "dataset");
             requestBodyJson.put("method", "get");
             requestBodyJson.put("params", "datasetId=dsPagamentoWebhook&constraintsField=txId&constraintsInitialValue=" + txid + "&constraintsField=processId&constraintsInitialValue=pix");
+            System.out.println("RequestBodyJson: " + requestBodyJson.toString());
             RequestBody requestBody = RequestBody.create(mediaType, txid);
             Request request = new Request.Builder()
                     .url(DATASEARCH_URI)
