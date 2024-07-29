@@ -29,8 +29,6 @@ public class FluigService {
     public Response notifyFluig (String bodyString, String paymentAutority) {
         if (paymentAutority.equals("BancoDoBrasil")) {
             setPaymentId(extractTxidFromJson(bodyString));
-        }else {
-            setPaymentId(extract);
         }
 
 	    moveProcessDataset(paymentId, paymentAutority);

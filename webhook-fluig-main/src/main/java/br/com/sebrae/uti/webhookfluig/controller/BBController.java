@@ -23,15 +23,15 @@ public class BBController {
     UtilService utilService;
 
 
-
-    Logger logger = Logger.getLogger(BBController.class);
+	Logger logger = Logger.getLogger(BBController.class);
 
     @PostMapping()
     public ResponseEntity<BB> postNotificacaoBB (HttpServletRequest request, @RequestBody BB bb) {
         utilService.printRequestInfo(request, "BB");
         try{
             String body = bb.toString();
-            fluigService.notifyFluig(body);
+	        String typePayment = "BancoDoBrasil";
+	        fluigService.notifyFluig(body, typePayment);
             logger.info(body);
             bbService.salvar(bb.getPix().get(0));
             return new ResponseEntity<>(bb, HttpStatus.OK);
