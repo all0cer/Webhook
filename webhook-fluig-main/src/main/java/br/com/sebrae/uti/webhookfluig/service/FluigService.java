@@ -13,10 +13,11 @@ import java.util.Map;
 public class FluigService {
     OkHttpClient client;
     MediaType mediaType;
+    private String paymentId;
     private final String DATASEARCH_URI = "https://fluighml.rn.sebrae.com.br/fluighub/rest/service/execute/datasearch";
 
     public FluigService() {
-        this.client = new OkHttpClient(); // Inicializa o OkHttpClient
+        this.client = new OkHttpClient();
         this.mediaType = MediaType.parse("application/json; charset=utf-8");
     }
 
@@ -25,9 +26,14 @@ public class FluigService {
         return payment_status == 2;
     }
 
-    public Response notifyFluig (String bodyString) {
-        String txid = extractTxidFromJson(bodyString);
-        getResponseDataSearch(txid);
+    public Response notifyFluig (String bodyString, String paymentAutority) {
+        if (paymentAutority.equals("BancoDoBrasil")) {
+            setPaymentId(extractTxidFromJson(bodyString));
+        }else {
+            setPaymentId(extract);
+        }
+
+	    moveProcessDataset(paymentId, paymentAutority);
 
 	    return null;
     }
@@ -39,7 +45,7 @@ public class FluigService {
 
             JSONArray pixArray = jsonObject.getJSONArray("pix");
 
-            if (pixArray.length() > 0) {
+            if (!pixArray.isEmpty()) {
                 JSONObject pixObject = pixArray.getJSONObject(0);
 
                 return pixObject.getString("txid");
@@ -52,27 +58,9 @@ public class FluigService {
         }
     }
 
-    private void checkValuesInResponseDatasearch(String cleaneredMessage) {
+    private void moveProcessDataset(String txid, String paymentType) {
         try {
-
-            JSONObject messageValueString = new JSONObject(cleaneredMessage);
-
-            JSONArray valuesArray = messageValueString.getJSONArray("values");
-
-
-            if (valuesArray == null || valuesArray.length() == 0) {
-                System.out.println("O campo 'values' está vazio.");
-            } else {
-                System.out.println("O campo 'values' contém dados.");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void getResponseDataSearch(String txid) {
-        try {
-            String jsonBody = "{\"endpoint\":\"dataset\",\"method\":\"get\",\"params\":\"datasetId=dsPagamentoWebhook&constraintsField=txId&constraintsInitialValue=" + txid + "&constraintsField=processId&constraintsInitialValue=pix\"}";
+            String jsonBody = "{\"endpoint\":\"dataset\",\"method\":\"get\",\"params\":\"datasetId=dsPagamentoWebhook&constraintsField=txId&constraintsInitialValue=" + txid + "&constraintsField=processId&constraintsInitialValue="+ paymentType +"\"}";
             System.out.println("RequestBodyJson: " + jsonBody);
             RequestBody requestBody = RequestBody.create(mediaType, jsonBody);
             Request request = new Request.Builder()
@@ -83,13 +71,6 @@ public class FluigService {
             System.out.println("Request: " + request);
             Response response = client.newCall(request).execute();
             System.out.println("Response: " + response.body().string());
-            if (response.isSuccessful()) {
-                String responseBody = response.body().string();
-
-            } else {
-                throw new IOException("Unexpected code " + response);
-            }
-
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
@@ -97,14 +78,12 @@ public class FluigService {
         }
     }
 
-    private String extractMessageFromResponse(String responseBody) {
-        try {
-            org.json.JSONObject jsonResponse = new org.json.JSONObject(responseBody);
-            return jsonResponse.getString("message");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "Not found message";
+    public String getPaymentId() {
+        return paymentId;
+    }
+
+    public void setPaymentId(String paymentId) {
+        this.paymentId = paymentId;
     }
 }
 

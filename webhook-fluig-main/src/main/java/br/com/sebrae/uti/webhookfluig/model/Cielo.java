@@ -41,6 +41,9 @@ public class Cielo {
                 ", \"customer_name:\"" + customer_name + '\"' +
                 ", \"customer_identity\":\"" + customer_identity + '\"' +
                 ", \"test_transaction\":\"" + test_transaction + '\"' +
+                ", \"product_id\":\"" + product_id + '\"' +
+                ", \"product_type\":\"" + product_type + '\"' +
+                ", \"product_expiration_date\":\"" + product_expiration_date + '\"' +
                 '}';
     }
 }
