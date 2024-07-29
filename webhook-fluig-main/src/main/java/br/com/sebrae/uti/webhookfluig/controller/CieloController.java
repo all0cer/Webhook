@@ -38,7 +38,7 @@ public class CieloController {
             logger.info(cielo.toString());
 
             if(fluigService.paymentStatusEqualTwo(body))
-                fluigService.notifyFluig(cielo.toString());
+                fluigService.notifyFluig(cielo.toString(), "cielo");
 
             return new ResponseEntity<>(HttpStatus.OK);
         } catch(Exception e) {
