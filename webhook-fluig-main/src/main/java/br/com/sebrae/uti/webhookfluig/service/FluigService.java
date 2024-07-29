@@ -29,6 +29,10 @@ public class FluigService {
     public Response notifyFluig (String bodyString, String paymentAutority) {
         if (paymentAutority.equals("BancoDoBrasil")) {
             setPaymentId(extractTxidFromJson(bodyString));
+        } else {
+            if (paymentAutority.equals("Cielo")) {
+                setPaymentId(extractProductIdFromJson(bodyString));
+            }
         }
 
 	    moveProcessDataset(paymentId, paymentAutority);
@@ -49,6 +53,23 @@ public class FluigService {
                 return pixObject.getString("txid");
             } else {
                 return "Array 'pix' está vazio";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Erro ao processar o JSON";
+        }
+    }
+
+    private String extractProductIdFromJson(String jsonString) {
+        try {
+            System.out.println("Json: " + jsonString);
+            JSONObject jsonObject = new JSONObject(jsonString);
+
+            // Extrair o valor do campo "product_id"
+            if (jsonObject.has("product_id")) {
+                return jsonObject.getString("product_id");
+            } else {
+                return "Campo 'product_id' não encontrado";
             }
         } catch (Exception e) {
             e.printStackTrace();
