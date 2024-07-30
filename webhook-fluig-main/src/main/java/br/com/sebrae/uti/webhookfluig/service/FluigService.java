@@ -1,8 +1,10 @@
 package br.com.sebrae.uti.webhookfluig.service;
 
+import br.com.sebrae.uti.webhookfluig.controller.BBController;
 import com.squareup.okhttp.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class FluigService {
@@ -18,6 +22,8 @@ public class FluigService {
     @Getter
     @Setter
     private String paymentId;
+
+    Logger logger = Logger.getLogger(FluigService.class);
 
 	public FluigService() {
         this.mediaType = MediaType.parse("application/json; charset=utf-8");
@@ -28,12 +34,12 @@ public class FluigService {
         return payment_status == 2;
     }
 
-    public void notifyFluig (String bodyString, String paymentAutority) {
+    public void notifyFluig (String bodyString, String paymentAutority) throws IOException {
         if (paymentAutority.equals("BancoDoBrasil")) {
             setPaymentId(extractTxidFromJson(bodyString));
         }
         else if (paymentAutority.equals("Cielo")) {
-                setPaymentId(extractProductIdFromJson(bodyString));
+                setPaymentId(extractProductIdFromString(bodyString));
         }
         else {
             throw new IllegalArgumentException("Invalid payment autority: " + paymentAutority);
@@ -64,40 +70,45 @@ public class FluigService {
         }
     }
 
-    private String extractProductIdFromJson(String jsonString) {
-        try {
-            System.out.println("Json: " + jsonString);
-            JSONObject jsonObject = new JSONObject(jsonString);
+    private String extractProductIdFromString(String body) {
+        if (body == null || body.isEmpty()) {
+            throw new IllegalArgumentException("Input body cannot be null or empty");
+        }
+        String regex = "\"product_id\":\"([^\"]+)\"";
+        Pattern pattern = java.util.regex.Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(body);
 
-            if (jsonObject.has("product_id")) {
-                return jsonObject.getString("product_id");
-            } else {
-                return "Campo 'product_id' não encontrado";
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Erro ao processar o JSON";
+        if (matcher.find()) {
+            return matcher.group(1); // Retorna o grupo capturado
+        } else {
+            throw new IllegalArgumentException("product_id not found in the input string");
         }
     }
 
-    private void moveProcessDataset(String txid, String paymentType) {
+    private void moveProcessDataset(String txid, String paymentType) throws IOException {
+        Response response = null;
         try {
             String jsonBody = "{\"endpoint\":\"dataset\",\"method\":\"get\",\"params\":\"datasetId=dsPagamentoWebhook&constraintsField=txId&constraintsInitialValue=" + txid + "&constraintsField=processId&constraintsInitialValue="+ paymentType +"\"}";
-            System.out.println("RequestBodyJson: " + jsonBody);
             RequestBody requestBody = RequestBody.create(mediaType, jsonBody);
 	        String datasearchUri = "https://fluighml.rn.sebrae.com.br/fluighub/rest/service/execute/datasearch";
 	        Request request = new Request.Builder()
                     .addHeader("Content-Type", "application/json")
                     .url(datasearchUri)
                     .post(requestBody)
-
                     .build();
-            System.out.println("Request: " + request);
-            client.newCall(request).execute();
+            System.out.println(jsonBody);
+            response = client.newCall(request).execute();
+            if (response.isSuccessful()) {
+                logger.info("Processo enviado para o dataset");
+                }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
 	        throw new RuntimeException(e);
+        }finally {
+            if (response != null) {
+               response.body().close();
+            }
         }
     }
 

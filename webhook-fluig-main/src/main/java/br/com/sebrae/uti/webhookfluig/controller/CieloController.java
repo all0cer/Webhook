@@ -29,7 +29,7 @@ public class CieloController {
 
     Logger logger = Logger.getLogger(CieloController.class);
 
-    @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @PostMapping()
     public ResponseEntity<Cielo> postNotificacaoCielo (HttpServletRequest request, @RequestParam Map<String, String> body){
         utilService.printRequestInfo(request, "CIELO");
         try{

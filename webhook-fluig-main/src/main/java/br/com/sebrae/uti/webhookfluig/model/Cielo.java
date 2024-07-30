@@ -34,15 +34,7 @@ public class Cielo {
     @Override
     public String toString() {
         return "{" +
-                "\"checkoutCieloOrderNumber\":\"" + checkoutCieloOrderNumber + '\"' +
-                ", \"tid\":\"" + tid + '\"' +
-                ", \"amount\":\"" + amount + '\"' +
-                ", \"payment_status:\"" + payment_status + '\"' +
-                ", \"customer_name:\"" + customer_name + '\"' +
-                ", \"customer_identity\":\"" + customer_identity + '\"' +
-                ", \"product_id\":\"" + product_id + '\"' +
-                ", \"product_type\":\"" + product_type + '\"' +
-                ", \"product_expiration_date\":\"" + product_expiration_date + '\"' +
+                "\"product_id\":\"" + product_id + '\"' +
                 "}";
     }
 }
