@@ -1,6 +1,8 @@
 package br.com.sebrae.uti.webhookfluig.service;
 
 import com.squareup.okhttp.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,13 +13,13 @@ import java.util.Map;
 
 @Service
 public class FluigService {
-    OkHttpClient client;
+    private static final OkHttpClient client = new OkHttpClient();
     MediaType mediaType;
+    @Getter
+    @Setter
     private String paymentId;
-    private final String DATASEARCH_URI = "https://fluighml.rn.sebrae.com.br/fluighub/rest/service/execute/datasearch";
 
-    public FluigService() {
-        this.client = new OkHttpClient();
+	public FluigService() {
         this.mediaType = MediaType.parse("application/json; charset=utf-8");
     }
 
@@ -26,18 +28,20 @@ public class FluigService {
         return payment_status == 2;
     }
 
-    public Response notifyFluig (String bodyString, String paymentAutority) {
+    public void notifyFluig (String bodyString, String paymentAutority) {
         if (paymentAutority.equals("BancoDoBrasil")) {
             setPaymentId(extractTxidFromJson(bodyString));
-        } else {
-            if (paymentAutority.equals("Cielo")) {
+        }
+        else if (paymentAutority.equals("Cielo")) {
                 setPaymentId(extractProductIdFromJson(bodyString));
-            }
+        }
+        else {
+            throw new IllegalArgumentException("Invalid payment autority: " + paymentAutority);
         }
 
-	    moveProcessDataset(paymentId, paymentAutority);
-
-	    return null;
+        if (getPaymentId() != null) {
+            moveProcessDataset(paymentId, paymentAutority);
+        }
     }
 
     private String extractTxidFromJson(String jsonString) {
@@ -65,7 +69,6 @@ public class FluigService {
             System.out.println("Json: " + jsonString);
             JSONObject jsonObject = new JSONObject(jsonString);
 
-            // Extrair o valor do campo "product_id"
             if (jsonObject.has("product_id")) {
                 return jsonObject.getString("product_id");
             } else {
@@ -82,14 +85,15 @@ public class FluigService {
             String jsonBody = "{\"endpoint\":\"dataset\",\"method\":\"get\",\"params\":\"datasetId=dsPagamentoWebhook&constraintsField=txId&constraintsInitialValue=" + txid + "&constraintsField=processId&constraintsInitialValue="+ paymentType +"\"}";
             System.out.println("RequestBodyJson: " + jsonBody);
             RequestBody requestBody = RequestBody.create(mediaType, jsonBody);
-            Request request = new Request.Builder()
+	        String datasearchUri = "https://fluighml.rn.sebrae.com.br/fluighub/rest/service/execute/datasearch";
+	        Request request = new Request.Builder()
                     .addHeader("Content-Type", "application/json")
-                    .url(DATASEARCH_URI)
+                    .url(datasearchUri)
                     .post(requestBody)
+
                     .build();
             System.out.println("Request: " + request);
-            Response response = client.newCall(request).execute();
-            System.out.println("Response: " + response.body().string());
+            client.newCall(request).execute();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
@@ -97,12 +101,5 @@ public class FluigService {
         }
     }
 
-    public String getPaymentId() {
-        return paymentId;
-    }
-
-    public void setPaymentId(String paymentId) {
-        this.paymentId = paymentId;
-    }
 }
 
