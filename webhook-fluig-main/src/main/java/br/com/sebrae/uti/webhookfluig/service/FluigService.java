@@ -74,14 +74,14 @@ public class FluigService {
         if (body == null || body.isEmpty()) {
             throw new IllegalArgumentException("Input body cannot be null or empty");
         }
-        String regex = "\"product_id\":\"([^\"]+)\"";
+        String regex = "\"order_number\":\"([^\"]+)\"";
         Pattern pattern = java.util.regex.Pattern.compile(regex);
         Matcher matcher = pattern.matcher(body);
 
         if (matcher.find()) {
             return matcher.group(1); // Retorna o grupo capturado
         } else {
-            throw new IllegalArgumentException("product_id not found in the input string");
+            throw new IllegalArgumentException("order_number not found in the input string");
         }
     }
 
