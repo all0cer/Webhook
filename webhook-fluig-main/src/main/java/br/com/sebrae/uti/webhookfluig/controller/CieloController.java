@@ -31,6 +31,8 @@ public class CieloController {
     public ResponseEntity<Cielo> postNotificacaoCielo (HttpServletRequest request, @RequestParam Map<String, String> body){
         utilService.printRequestInfo(request, "CIELO");
         try{
+            System.out.println("Corpo da requisição: " + body);
+            System.out.println("requisição: " + request);
             Cielo cielo = utilService.parseBody(body);
             logger.info(cielo.toString());
             String typePayment = "Cielo";
