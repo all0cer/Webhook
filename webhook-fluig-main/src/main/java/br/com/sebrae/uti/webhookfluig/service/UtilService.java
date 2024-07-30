@@ -1,7 +1,6 @@
 package br.com.sebrae.uti.webhookfluig.service;
 
 import br.com.sebrae.uti.webhookfluig.model.Cielo;
-import br.com.sebrae.uti.webhookfluig.repository.CieloRepository;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

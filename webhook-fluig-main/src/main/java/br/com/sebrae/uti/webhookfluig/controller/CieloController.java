@@ -7,7 +7,6 @@ import br.com.sebrae.uti.webhookfluig.service.UtilService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +24,6 @@ public class CieloController {
     @Autowired
     UtilService utilService;
 
-    String endpointFluig = "http://localhost:8081/bb/notificacao/teste";
 
     Logger logger = Logger.getLogger(CieloController.class);
 
@@ -34,7 +32,6 @@ public class CieloController {
         utilService.printRequestInfo(request, "CIELO");
         try{
             Cielo cielo = utilService.parseBody(body);
-            cieloService.salvar(cielo);
             logger.info(cielo.toString());
             String typePayment = "Cielo";
             if(fluigService.paymentStatusEqualTwo(body))

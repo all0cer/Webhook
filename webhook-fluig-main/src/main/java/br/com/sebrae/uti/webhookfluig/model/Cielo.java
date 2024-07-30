@@ -3,10 +3,9 @@ package br.com.sebrae.uti.webhookfluig.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 
-@Entity
+
 @Builder
 @Getter
 @Setter
@@ -14,7 +13,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class Cielo {
 
-    @Id
+
     @JsonProperty("checkout_cielo_order_number")
     private String checkoutCieloOrderNumber;
     private BigDecimal amount;

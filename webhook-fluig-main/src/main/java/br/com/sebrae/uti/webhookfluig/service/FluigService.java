@@ -1,9 +1,9 @@
 package br.com.sebrae.uti.webhookfluig.service;
 
-import br.com.sebrae.uti.webhookfluig.controller.BBController;
-import com.squareup.okhttp.*;
+
 import lombok.Getter;
 import lombok.Setter;
+import okhttp3.*;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
