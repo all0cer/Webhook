@@ -35,10 +35,11 @@ public class CieloController {
             Cielo cielo = utilService.parseBody(body);
             logger.info(cielo.toString());
             String typePayment = "Cielo";
-            if(fluigService.paymentStatusEqualTwo(body))
+            if(fluigService.paymentStatusEqualTwo(body)){
                 fluigService.notifyFluig(cielo.toString(), typePayment);
-
-            return new ResponseEntity<>(HttpStatus.OK);
+                logger.info("Notificado");
+                return new ResponseEntity<>(HttpStatus.OK);}
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch(Exception e) {
 	        logger.warn("Não foi possível notificar o fluig. Erro: {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

@@ -29,9 +29,12 @@ public class BBController {
     public ResponseEntity<BB> postNotificacaoBB (HttpServletRequest request, @RequestBody BB bb) {
         utilService.printRequestInfo(request, "BB");
         try{
+
             String body = bb.toString();
+            logger.info(bb);
 	        String typePayment = "BancoDoBrasil";
 	        fluigService.notifyFluig(body, typePayment);
+            logger.info("Notificado");
             return new ResponseEntity<>(bb, HttpStatus.OK);
         } catch(Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

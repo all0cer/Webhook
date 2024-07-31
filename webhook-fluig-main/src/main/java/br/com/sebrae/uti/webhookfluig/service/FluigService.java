@@ -78,8 +78,8 @@ public class FluigService {
         Pattern pattern = java.util.regex.Pattern.compile(regex);
         Matcher matcher = pattern.matcher(body);
 
-        if (matcher.find()) {
-            return matcher.group(1); // Retorna o grupo capturado
+        if (matcher.find() && !matcher.group(1).isEmpty()) {
+            return matcher.group(1);
         } else {
             throw new IllegalArgumentException("order_number not found in the input string");
         }
@@ -89,18 +89,22 @@ public class FluigService {
         Response response = null;
         try {
             String jsonBody = "{\"endpoint\":\"dataset\",\"method\":\"get\",\"params\":\"datasetId=dsPagamentoWebhook&constraintsField=txId&constraintsInitialValue=" + txid + "&constraintsField=processId&constraintsInitialValue="+ paymentType +"\"}";
-            RequestBody requestBody = RequestBody.create(mediaType, jsonBody);
+            RequestBody requestBody = RequestBody.create(jsonBody, mediaType);
 	        String datasearchUri = "https://fluighml.rn.sebrae.com.br/fluighub/rest/service/execute/datasearch";
 	        Request request = new Request.Builder()
                     .addHeader("Content-Type", "application/json")
                     .url(datasearchUri)
                     .post(requestBody)
                     .build();
-            System.out.println(jsonBody);
             response = client.newCall(request).execute();
-            if (response.isSuccessful()) {
-                logger.info("Processo enviado para o dataset");
+            logger.info(response.body().string());
+            if (response.code() != 200) {
+                logger.error("Erro ao enviar o processo para o dataset");
+                throw new IOException("Erro ao enviar o processo para o dataset");
                 }
+            else {
+                logger.info("Processo enviado para o dataset");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {

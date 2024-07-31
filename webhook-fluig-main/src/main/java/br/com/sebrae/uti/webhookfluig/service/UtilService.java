@@ -23,7 +23,8 @@ public class UtilService {
         logger.info("Request " + tipo + " - Endpoint " + request.getRequestURI() + " - Hora " + sdf.format(resultDate));
     }
 
-    public Cielo parseBody (Map<String, String> body) {
+    public Cielo parseBody (Map<String, String> body) throws RuntimeException {
+        if(body.get("order_number") != null){
         return Cielo.builder()
                 .checkoutCieloOrderNumber(body.get("checkout_cielo_order_number"))
                 .amount(BigDecimal.valueOf(Double.parseDouble(body.get("amount"))))
@@ -41,4 +42,7 @@ public class UtilService {
                 .product_expiration_date(body.get("product_expiration_date"))
                 .build();
     }
+        throw new RuntimeException();
+    }
+
 }
