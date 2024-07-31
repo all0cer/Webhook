@@ -4,7 +4,8 @@ package br.com.sebrae.uti.webhookfluig.service;
 import lombok.Getter;
 import lombok.Setter;
 import okhttp3.*;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,7 +24,7 @@ public class FluigService {
     @Setter
     private String paymentId;
 
-    Logger logger = Logger.getLogger(FluigService.class);
+    Logger logger = LogManager.getLogger(FluigService.class);
 
 	public FluigService() {
         this.mediaType = MediaType.parse("application/json; charset=utf-8");
