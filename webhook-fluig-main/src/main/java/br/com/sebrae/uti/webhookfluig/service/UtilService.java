@@ -1,10 +1,11 @@
 package br.com.sebrae.uti.webhookfluig.service;
 
 import br.com.sebrae.uti.webhookfluig.model.Cielo;
-import org.apache.log4j.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -15,7 +16,7 @@ import java.util.Map;
 public class UtilService {
     @Autowired
     CieloService cieloService;
-    Logger logger = Logger.getLogger(UtilService.class);
+    Logger logger = LogManager.getLogger(UtilService.class);
     public void printRequestInfo (HttpServletRequest request, String tipo) {
         SimpleDateFormat sdf = new SimpleDateFormat("h:mm a");
         Date resultDate = new Date(System.currentTimeMillis());

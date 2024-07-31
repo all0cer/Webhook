@@ -30,8 +30,7 @@ public class FluigService {
     }
 
     public boolean paymentStatusEqualTwo (Map<String, String> body) {
-        int payment_status = Integer.parseInt(body.get("payment_status"));
-        return payment_status == 2;
+        return "2".equals(body.get("payment_status"));
     }
 
     public void notifyFluig (String bodyString, String paymentAutority) throws IOException {
